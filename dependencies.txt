@@ -1,0 +1,5 @@
+This project depends on
+
+- ActionBarSherlock (http://ABS.io)
+- ViewpagerIndicator (http://ViewpagerIndicator.com)
+- Android support library (already in /libs) (http://developer.android.com/tools/extras/support-library.html)
