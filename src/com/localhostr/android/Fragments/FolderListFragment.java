@@ -32,7 +32,7 @@ public class FolderListFragment extends SherlockListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setHasOptionsMenu(true);
 
 	}
@@ -51,43 +51,43 @@ public class FolderListFragment extends SherlockListFragment {
 	@Override
 	public void onAttach(final Activity activity) {
 		super.onAttach(activity);
-		
+
 		ArrayList<FolderInfo> folders = new ArrayList<FolderInfo>();
 		String[] FolderNames = new String[] { "Folder A", "Folder B",
 				"Folder C", "Folder D"};
-		
+
 		for (int i = 0; i<15; i++) {
 			folders.add(new FolderInfo(FolderNames[i % FolderNames.length], 
 					Math.abs(new Random(2).nextInt()) / 500));
 		}
-		
+
 		setListAdapter(new FolderAdapter(activity, R.layout.folder_list_row,
 				folders));
-		
-		
+
+
 	}
-	
+
 	@Override
 	public void onViewCreated(final View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		
+
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				final boolean isDualPane = getResources().getBoolean(R.bool.dual_pane);
-				
+
 				if (isDualPane) {
 					getActivity().getSupportFragmentManager()
 					.beginTransaction().replace(
 							R.id.container_for_fragment, 
 							Fragment.instantiate(getActivity(), FilesListFragment.class.getName()))
-					.addToBackStack(null)
-					.commit();
+							.addToBackStack(null)
+							.commit();
 				}
-				
-				
+
+
 				else {
 					startActivity(new Intent(view.getContext(), ViewFolder.class));
 				}
@@ -98,13 +98,13 @@ public class FolderListFragment extends SherlockListFragment {
 	private class FolderInfo {
 		public final String Name;
 		public final int NumItems;
-		
+
 		public FolderInfo(String name, int num) {
 			Name = name;
 			NumItems = num;
 		}
 	}
- 	 
+
 	private class FolderAdapter extends ArrayAdapter<FolderInfo> {
 
 
@@ -117,16 +117,16 @@ public class FolderListFragment extends SherlockListFragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = getActivity().getLayoutInflater().inflate
 			(R.layout.folder_list_row, parent, false);
-			
+
 			FolderInfo fi = getItem(position);
-			
+
 			((TextView) view.findViewById(R.id.primary_folder_info))
 			.setText(fi.Name);
-		
+
 			((TextView) view.findViewById(R.id.secondary_folder_info))
 			.setText(fi.NumItems + " files");
-			
+
 			return view;
 		}	
 	}
- }
+}

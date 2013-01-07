@@ -37,15 +37,15 @@ public class Home extends SherlockFragmentActivity
 	private static final int LOADER_FILES = 0;
 	private static final int LOADER_FOLDERS = 1;
 	private static final int LOADER_THUMBS = 2;
-	
+
 	public static final String EXTRA_FROM_LOGIN = "from_login_screen";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		
+
 		final boolean haveUser = Utils.getDB(this).haveUser();
-		
+
 		if (! haveUser) {
 			startActivity(new Intent(this, LoginActivity.class));
 			finish();
@@ -61,13 +61,13 @@ public class Home extends SherlockFragmentActivity
 
 		setContentView(R.layout.main);
 	}
-	
-	
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getSupportMenuInflater().inflate(R.menu.home_menu, menu);
-		
+
 		return true;
 	}
 
@@ -79,7 +79,7 @@ public class Home extends SherlockFragmentActivity
 				getSupportLoaderManager().initLoader(LOADER_FOLDERS, null, this).forceLoad();
 				return true;
 		}
-		
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -88,11 +88,11 @@ public class Home extends SherlockFragmentActivity
 		switch (id){
 			case LOADER_FILES:
 				return new DetailsLoader(this, Constants.BASE_FILES_URL);
-				
+
 			case LOADER_FOLDERS:
 				return new DetailsLoader(this, Constants.BASE_FOLDERS_URL);
 		}
-		
+
 		return null;
 	}
 
@@ -101,27 +101,27 @@ public class Home extends SherlockFragmentActivity
 		if (!getSupportLoaderManager().hasRunningLoaders()) {
 			setProgressBarIndeterminateVisibility(false);
 		}
-		
+
 		try {
 			final JSONArray ja = new JSONArray(results);
 			final JSONObject jo = ja.getJSONObject(0);
-			
+
 			if (jo.has("exception")) {
 				//TODO
 				return;
 			}
-			
+
 			else if (jo.has("error")) {
 				//TODO
 				return;
 			}
-			
+
 			else {
 				switch (loader.getId()) {
 					case LOADER_FILES:
 						parseFileList(ja);
 						break;
-						
+
 					case LOADER_FOLDERS:
 						parseFolderList(ja);
 						break;
@@ -131,13 +131,13 @@ public class Home extends SherlockFragmentActivity
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		//System.out.println(results);
 	}
 
 	private void parseFolderList(JSONArray results) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 
@@ -147,9 +147,9 @@ public class Home extends SherlockFragmentActivity
 		DB db = Utils.getDB(this);
 		db.clearFilesTable();
 		int parsed = 0;
-		
+
 		ArrayList<ContentValues> values = new ArrayList<ContentValues>();
-		
+
 		for (int i = 0; i<results.length(); i++) {
 			try {
 				JSONObject jo = results.getJSONObject(i);
@@ -162,27 +162,27 @@ public class Home extends SherlockFragmentActivity
 					+ lowertype.substring(1).toLowerCase();
 				String small = null;
 				String large = null;
-				
+
 				if (type.equalsIgnoreCase("image")) {
 					try {
 						JSONObject links = jo.getJSONObject("direct");
-						
+
 						small = links.getString("150x");
 						//TODO: Does large always exists?
 						large = links.getString("930x");
 					}
-					
+
 					catch (JSONException e) {
 						e.printStackTrace();
 					}
 				}
-				
+
 				final String href = jo.getString("href");
 				final String id = jo.getString("id");
 				final int size = jo.getInt("size");
-					
+
 				ContentValues cv = new ContentValues();
-					
+
 				cv.put(FILES_COLUMNS.FILE_ID, id);
 				cv.put(FILES_COLUMNS.NAME, name);
 				cv.put(FILES_COLUMNS.FILE_TYPE, type);
@@ -190,27 +190,27 @@ public class Home extends SherlockFragmentActivity
 				cv.put(FILES_COLUMNS.DOWNLOADS, downloads);
 				cv.put(FILES_COLUMNS.WEB_LINK, href);
 				cv.put(FILES_COLUMNS.FILE_SIZE, size);
-					
+
 				if (small != null) {
 					cv.put(FILES_COLUMNS.LINK_SMALL, small);
 				}
-				
+
 				if (large != null) {
 					cv.put(FILES_COLUMNS.LINK_LARGE, large);
 				}
-					
+
 				values.add(cv);
-				
+
 				parsed++;
-				
+
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				
+
 			}
 
 		}
-		
+
 		db.doBatchFileAdd(values);
 	}
 
@@ -220,33 +220,33 @@ public class Home extends SherlockFragmentActivity
 	}
 
 	public static class DetailsLoader extends AsyncTaskLoader<String> {
-	
+
 		private final Context mContext;
 		private final String mUrl;
-		
+
 		public DetailsLoader(Context context, String url) {
 			super(context);
 			mContext = context;
 			mUrl = url;
 		}
-	
+
 		@Override
 		public String loadInBackground() {
 			DB db = Utils.getDB(mContext);
 			String authString = db.makeAuthString();
 			String jsonResult = null;
-			
+
 			try {
 				jsonResult = Utils.makeApiRequest(mUrl, authString);
-				
+
 				//jsonResult = Utils.getSampleFilesList();
-					
+
 			} catch (IOException e) {
 				e.printStackTrace();
-				
+
 				return Utils.createJSONStringFromException(e, true);
 			}
-			
+
 			return jsonResult;
 		}
 	}
@@ -257,10 +257,10 @@ public class Home extends SherlockFragmentActivity
 			.findFragmentById(R.id.sidebar_fragment);
 			sidebar.showUploadsScreen();
 		}
-		
+
 		else {
 			PagerFragment pf = (PagerFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.pager_fragment);
+			.findFragmentById(R.id.pager_fragment);
 			pf.showUploadsScreen();
 		}
 	}

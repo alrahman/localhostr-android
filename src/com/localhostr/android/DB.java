@@ -30,40 +30,40 @@ public final class DB extends SQLiteOpenHelper {
 	 */
 	public static class Plan {
 		public static final Plan FREE = new Plan(0) {
-			
+
 			@Override
 			public String toString() {
 				return "Free";
 			}
 		};
-		
+
 		public static final Plan PREMIUM = new Plan(1) {
-			
+
 			@Override
 			public String toString() {
 				return "Premium";
 			}
 		};
-		
+
 		private int value;
-		
+
 		private Plan(int value) {
 			this.value = value;
 		}
-		
+
 		public static Plan readPlan(String str) {
 			if (str.equalsIgnoreCase("free")) {
 				return FREE;
 			}
-			
+
 			else if (str.equalsIgnoreCase("premium")) {
 				return PREMIUM;
 			}
-			
+
 			else {
 				Log.e(TAG, "Unknown plan " + str);
 			}
-			
+
 			return FREE;
 		}
 
@@ -71,15 +71,15 @@ public final class DB extends SQLiteOpenHelper {
 			if (plan == FREE.value) {
 				return FREE;
 			}
-			
+
 			else if (plan == PREMIUM.value) {
 				return PREMIUM;
 			}
-			
+
 			return FREE;
 		}
 	};
-		
+
 	/**
 	 * Static values that can be used to reference
 	 * columns in the user table
@@ -94,7 +94,7 @@ public final class DB extends SQLiteOpenHelper {
 		public static final String PLAN = "plan";
 		public static final String UPLOADS_TODAY = "uploads_today";	
 	}
-	
+
 	/**
 	 * Static values that can be used to reference
 	 * columns in the files table
@@ -113,7 +113,7 @@ public final class DB extends SQLiteOpenHelper {
 		public static final String THUMBNAIL = "thumbnail";
 		public static final String FOLDER = "folder";		
 	}
-	
+
 	/**
 	 * Static values that can be used to reference
 	 * columns in the folders table
@@ -126,59 +126,59 @@ public final class DB extends SQLiteOpenHelper {
 		public static final String FOLDER_ID = "folder_id";
 		public static final String PRIVATE = "private";
 	}
-	
+
 	private static final String DB_NAME = "localhostr.db";
-	
+
 	/*
 	 * Increment this when changes to the db structure 
 	 * are necessary so onUpgrade will be called
 	 */
 	private static final int DB_VERSION = 1;
-	
+
 	private static final String TABLE_USER = "user";
 	private static final String TABLE_FILES = "files";
 	private static final String TABLE_FOLDERS = "folders";
-		  
+
 	private static final String CREATE_TABLE_USER = 
 		new StringBuilder("CREATE TABLE IF NOT EXISTS ")
-			.append(TABLE_USER)
-			.append(" (").append(USER_COLUMNS.ID).append(" INTEGER ").append("PRIMARY KEY AUTOINCREMENT, ")
-			.append(USER_COLUMNS.DAILY_ALLOWANCE).append(" INTEGER NOT NULL DEFAULT 15, ")
-			.append(USER_COLUMNS.MAX_FILESIZE).append(" INTEGER, ")
-			.append(USER_COLUMNS.FILE_COUNT).append(" INTEGER DEFAULT 0, ")
-			.append(USER_COLUMNS.PLAN).append(" INTEGER NOT NULL DEFAULT " + Plan.FREE.value + ", ")
-			.append(USER_COLUMNS.UPLOADS_TODAY).append(" INTEGER DEFAULT 0, ")
-			.append(USER_COLUMNS.EMAIL).append(" TEXT NOT NULL, ")
-			.append(USER_COLUMNS.PASSWORD).append(" TEXT NOT NULL) ")
-		.toString();
-	
+	.append(TABLE_USER)
+	.append(" (").append(USER_COLUMNS.ID).append(" INTEGER ").append("PRIMARY KEY AUTOINCREMENT, ")
+	.append(USER_COLUMNS.DAILY_ALLOWANCE).append(" INTEGER NOT NULL DEFAULT 15, ")
+	.append(USER_COLUMNS.MAX_FILESIZE).append(" INTEGER, ")
+	.append(USER_COLUMNS.FILE_COUNT).append(" INTEGER DEFAULT 0, ")
+	.append(USER_COLUMNS.PLAN).append(" INTEGER NOT NULL DEFAULT " + Plan.FREE.value + ", ")
+	.append(USER_COLUMNS.UPLOADS_TODAY).append(" INTEGER DEFAULT 0, ")
+	.append(USER_COLUMNS.EMAIL).append(" TEXT NOT NULL, ")
+	.append(USER_COLUMNS.PASSWORD).append(" TEXT NOT NULL) ")
+	.toString();
+
 	private static final String CREATE_TABLE_FILES = 
 		new StringBuilder("CREATE TABLE IF NOT EXISTS ")
-			.append(TABLE_FILES)
-			.append(" (" + FILES_COLUMNS.ID).append(" INTEGER ").append("PRIMARY KEY AUTOINCREMENT, ")
-			.append(FILES_COLUMNS.NAME).append(" TEXT NOT NULL, ")
-			.append(FILES_COLUMNS.WEB_LINK).append(" TEXT, ")
-			.append(FILES_COLUMNS.FILE_TYPE).append(" TEXT, ")
-			.append(FILES_COLUMNS.FILE_ID).append(" TEXT NOT NULL, ")
-			.append(FILES_COLUMNS.FILE_SIZE).append(" INTEGER DEFAULT 0, ")
-			.append(FILES_COLUMNS.DATE_ADDED).append(" TEXT NOT NULL, ")
-			.append(FILES_COLUMNS.LINK_SMALL).append(" TEXT, ")
-			.append(FILES_COLUMNS.LINK_LARGE).append(" TEXT, ")
-			.append(FILES_COLUMNS.DOWNLOADS).append(" INTEGER, ")
-			.append(FILES_COLUMNS.THUMBNAIL).append(" TEXT, ")
-			.append(FILES_COLUMNS.FOLDER).append(" INTEGER DEFAULT -1)")
-		.toString();
-	
+	.append(TABLE_FILES)
+	.append(" (" + FILES_COLUMNS.ID).append(" INTEGER ").append("PRIMARY KEY AUTOINCREMENT, ")
+	.append(FILES_COLUMNS.NAME).append(" TEXT NOT NULL, ")
+	.append(FILES_COLUMNS.WEB_LINK).append(" TEXT, ")
+	.append(FILES_COLUMNS.FILE_TYPE).append(" TEXT, ")
+	.append(FILES_COLUMNS.FILE_ID).append(" TEXT NOT NULL, ")
+	.append(FILES_COLUMNS.FILE_SIZE).append(" INTEGER DEFAULT 0, ")
+	.append(FILES_COLUMNS.DATE_ADDED).append(" TEXT NOT NULL, ")
+	.append(FILES_COLUMNS.LINK_SMALL).append(" TEXT, ")
+	.append(FILES_COLUMNS.LINK_LARGE).append(" TEXT, ")
+	.append(FILES_COLUMNS.DOWNLOADS).append(" INTEGER, ")
+	.append(FILES_COLUMNS.THUMBNAIL).append(" TEXT, ")
+	.append(FILES_COLUMNS.FOLDER).append(" INTEGER DEFAULT -1)")
+	.toString();
+
 	private static final String CREATE_TABLE_FOLDERS = 
 		new StringBuilder("CREATE TABLE IF NOT EXISTS ")
-			.append(TABLE_FOLDERS)
-			.append(" (" + FOLDERS_COLUMNS.ID).append(" INTEGER ").append("PRIMARY KEY AUTOINCREMENT, ")
-			.append(FOLDERS_COLUMNS.NAME).append(" TEXT NOT NULL, ")
-			.append(FOLDERS_COLUMNS.WEB_LINK).append(" TEXT, ")
-			.append(FOLDERS_COLUMNS.FOLDER_ID).append(" TEXT NOT NULL, ")
-			.append(FOLDERS_COLUMNS.PRIVATE).append(" INTEGER DEFAULT 1, ")
-			.append(FOLDERS_COLUMNS.DATE_ADDED).append(" TEXT) ")
-		.toString();
+	.append(TABLE_FOLDERS)
+	.append(" (" + FOLDERS_COLUMNS.ID).append(" INTEGER ").append("PRIMARY KEY AUTOINCREMENT, ")
+	.append(FOLDERS_COLUMNS.NAME).append(" TEXT NOT NULL, ")
+	.append(FOLDERS_COLUMNS.WEB_LINK).append(" TEXT, ")
+	.append(FOLDERS_COLUMNS.FOLDER_ID).append(" TEXT NOT NULL, ")
+	.append(FOLDERS_COLUMNS.PRIVATE).append(" INTEGER DEFAULT 1, ")
+	.append(FOLDERS_COLUMNS.DATE_ADDED).append(" TEXT) ")
+	.toString();
 
 	/**
 	 * Do not call this directly. Instead,
@@ -215,7 +215,7 @@ public final class DB extends SQLiteOpenHelper {
 		//to SQLite docs, this turns it on
 		db.execSQL("PRAGMA foreign_keys = ON;");
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade(android.database.sqlite.SQLiteDatabase, int, int)
@@ -238,7 +238,7 @@ public final class DB extends SQLiteOpenHelper {
 	public void saveUserDetails(String email, String password,
 			String allowance, String plan, String maxFileSize, String numFiles,
 			String uploadsToday) {	
-		
+
 		ContentValues cv = new ContentValues(7);
 		cv.put(USER_COLUMNS.EMAIL, email);
 		cv.put(USER_COLUMNS.PASSWORD, password);
@@ -248,23 +248,23 @@ public final class DB extends SQLiteOpenHelper {
 		cv.put(USER_COLUMNS.FILE_COUNT, numFiles);
 		cv.put(USER_COLUMNS.UPLOADS_TODAY, uploadsToday);		
 		getWritableDatabase().insert(TABLE_USER, null, cv);
-		
+
 	}
-	
+
 	/**
 	 * Check if a user already exists
 	 * 
 	 * @return
 	 */
 	public boolean haveUser() {
-		
+
 		Cursor c = getReadableDatabase().query(
 				TABLE_USER, new String[] { USER_COLUMNS.EMAIL}, 
 				null, null, null, null, null);
-		
+
 		int count = c.getCount();
 		c.close();
-		
+
 		return count > 0;
 	}
 
@@ -275,9 +275,9 @@ public final class DB extends SQLiteOpenHelper {
 	 */
 	public ContentValues getAccountInfo() {
 		Cursor c = getReadableDatabase().query(TABLE_USER, null, null, null, null, null, null);
-		
+
 		ContentValues cv = new ContentValues();
-		
+
 		if (c.moveToFirst()) {
 			cv.put(USER_COLUMNS.EMAIL, c.getString(c.getColumnIndex(USER_COLUMNS.EMAIL)));
 			cv.put(USER_COLUMNS.PLAN, c.getInt(c.getColumnIndex(USER_COLUMNS.PLAN)));
@@ -285,9 +285,9 @@ public final class DB extends SQLiteOpenHelper {
 			cv.put(USER_COLUMNS.MAX_FILESIZE, c.getInt(c.getColumnIndex(USER_COLUMNS.MAX_FILESIZE)));
 			cv.put(USER_COLUMNS.FILE_COUNT, c.getInt(c.getColumnIndex(USER_COLUMNS.FILE_COUNT)));	
 		}
-		
+
 		c.close();
-		
+
 		return cv;
 	}
 
@@ -311,19 +311,19 @@ public final class DB extends SQLiteOpenHelper {
 		Cursor c = getReadableDatabase().query(TABLE_USER, 
 				new String[] { USER_COLUMNS.EMAIL, USER_COLUMNS.PASSWORD}, 
 				null, null, null, null, null);
-		
+
 
 		String base64 = "";
-		
+
 		if (c.moveToFirst()) {
 			String email = c.getString(c.getColumnIndex(USER_COLUMNS.EMAIL));
 			String password = c.getString(c.getColumnIndex(USER_COLUMNS.PASSWORD));
-			
+
 			base64 = 
 				Base64.encodeToString((email + ":" + password).getBytes(), 
 						Base64.NO_WRAP);
 		}
-		
+
 		c.close();
 		return base64;
 	}
@@ -334,11 +334,11 @@ public final class DB extends SQLiteOpenHelper {
 	 * @return the id of the newly inserted row, or -1 if there was an error
 	 */
 	public int addFile(ContentValues cv) {
-		
+
 		return (int) getWritableDatabase().insertOrThrow(TABLE_FILES, null, cv);
-		
+
 	}
-	
+
 	/**
 	 * Add a number of files to the database as a batch job. 
 	 * <br> <br>
@@ -351,31 +351,31 @@ public final class DB extends SQLiteOpenHelper {
 	public void doBatchFileAdd(List<ContentValues> batchList) {
 		final SQLiteDatabase db = getWritableDatabase();
 		db.beginTransaction();
-		
+
 		if (mFilesListener != null) {
 			mFilesListener.onBatchAddStarted();
 		}
-		
+
 		try {
 			for (int i = 0; i<batchList.size(); i++) {
 				addFile(batchList.get(i));
 			}
-			
+
 			db.setTransactionSuccessful();
 		}
-		
+
 		catch (SQLiteException sqe) {
 			sqe.printStackTrace();
 		}
-		
+
 		finally {
 			db.endTransaction();
 		}
-		
+
 		if (mFilesListener != null) {
 			mFilesListener.onBatchAddFinished();
 		}
-		
+
 	}
 
 	/**
@@ -396,7 +396,7 @@ public final class DB extends SQLiteOpenHelper {
 		 */
 		realColumns[0] = FILES_COLUMNS.ID;
 		System.arraycopy(columns, 0, realColumns, 1, columns.length);
-		
+
 		final Cursor c = getReadableDatabase().query(
 				TABLE_FILES, 
 				realColumns, null, null, null, null, null);
@@ -406,22 +406,22 @@ public final class DB extends SQLiteOpenHelper {
 	public void setFilesTableListener(FilesTableChangeListener listener) {
 		mFilesListener = listener;
 	}
-	
+
 	public void removeFilesTableListener(FilesTableChangeListener listener) {
 		if (mFilesListener == listener) {
 			mFilesListener = null;
 		}
 	}
-	
+
 	private FilesTableChangeListener mFilesListener;
-	
+
 	/**
 	 * Allows a client to listener for changes to the Files table
 	 * @author Al
 	 *
 	 */
 	public static interface FilesTableChangeListener {
-		
+
 		public void onBatchAddStarted();
 		public void onBatchAddFinished();
 		public void onFilesListCleared();
@@ -432,6 +432,6 @@ public final class DB extends SQLiteOpenHelper {
 		if (mFilesListener != null) {
 			mFilesListener.onFilesListCleared();
 		}
-		
+
 	}
 }

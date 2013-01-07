@@ -65,17 +65,17 @@ public class LoginActivity extends SherlockActivity {
 
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
-				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-					@Override
-					public boolean onEditorAction(TextView textView, int id,
-							KeyEvent keyEvent) {
-						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
-							return true;
-						}
-						return false;
-					}
-				});
+		.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView textView, int id,
+					KeyEvent keyEvent) {
+				if (id == R.id.login || id == EditorInfo.IME_NULL) {
+					attemptLogin();
+					return true;
+				}
+				return false;
+			}
+		});
 
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
@@ -162,27 +162,27 @@ public class LoginActivity extends SherlockActivity {
 
 			mLoginStatusView.setVisibility(View.VISIBLE);
 			mLoginStatusView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 1 : 0)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLoginStatusView.setVisibility(show
-									? View.VISIBLE
+			.alpha(show ? 1 : 0)
+			.setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mLoginStatusView.setVisibility(show
+							? View.VISIBLE
 									: View.GONE);
-						}
-					});
+				}
+			});
 
 			mLoginFormView.setVisibility(View.VISIBLE);
 			mLoginFormView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 0 : 1)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLoginFormView.setVisibility(show
-									? View.GONE
+			.alpha(show ? 0 : 1)
+			.setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mLoginFormView.setVisibility(show
+							? View.GONE
 									: View.VISIBLE);
-						}
-					});
+				}
+			});
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.
@@ -196,18 +196,18 @@ public class LoginActivity extends SherlockActivity {
 	 * the user.
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, String> {
-		
+
 		@Override
 		protected String doInBackground(Void... params) {
 			final String encoded = 
 				Base64.encodeToString((mEmail + ":" + mPassword).getBytes(), 
-					Base64.NO_WRAP);
-			
+						Base64.NO_WRAP);
+
 			try {
 				return Utils.makeApiRequest(Constants.REQUEST_USER_DETAILS, encoded);
 			} catch (IOException e) {
 				return Utils.createJSONStringFromException(e, false);
-				
+
 			}
 		}
 
@@ -215,12 +215,12 @@ public class LoginActivity extends SherlockActivity {
 		protected void onPostExecute(String result) {
 			mAuthTask = null;
 			showProgress(false);
-					
+
 			try {
 				JSONObject jo = new JSONObject(result);
-				
+
 				//TODO: Check for exception response
-				
+
 				if (jo.has("error")) {
 					JSONObject errorObj = jo.getJSONObject("error");
 					String errorCode = errorObj.getString("code");
@@ -228,32 +228,32 @@ public class LoginActivity extends SherlockActivity {
 					TextView error = (TextView) findViewById(R.id.error_display);
 
 					String errorMsg;
-					
+
 					switch (Integer.parseInt(errorCode)) {
 						case 605:
 							errorMsg = "An error occured when authenticating with the server";
 							break;
-							
+
 						case 606:
 							errorMsg = "Incorrect login details - Check and try again";
 							break;
-							
+
 						case 607:
 							errorMsg = "Your account is banned. Contact support";
 							break;
-							
-							
+
+
 						default:
 							errorMsg = "An unknown error occured (code " + errorCode + ")";
 							break;
 					}
-					
+
 					error.setText(errorMsg);
 					error.setVisibility(View.VISIBLE);
 				}
-				
+
 				else if (jo.has("email")) {
-					
+
 					String allowance = jo.getString("daily_upload_allowance");
 					String maxFileSize = jo.getString("max_filesize");
 					String plan = jo.getString("plan");
@@ -261,25 +261,25 @@ public class LoginActivity extends SherlockActivity {
 					String numFiles = jo.getString("file_count");
 					String password = mPassword;
 					String uploadsToday = jo.getString("uploads_today");
-					
+
 					Utils.getDB(LoginActivity.this).saveUserDetails(
 							email, password, allowance, plan, maxFileSize, numFiles,
 							uploadsToday);
-					
+
 					startActivity(new Intent(LoginActivity.this, Home.class)
 					.putExtra(Home.EXTRA_FROM_LOGIN, true));
-					
+
 					finish();
-					
+
 				}
-				
+
 			} catch (JSONException e) {
-				
+
 				if (DEBUG) {
 					Log.e(TAG, "", e);
 				}
 			}
-						
+
 		}
 
 		@Override
