@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item 
+        android:id="@+id/menu_copy_file_link"
+        android:title="Copy Link"
+	/>
+
+    <item 
+        android:id="@+id/menu_view_file"
+        android:title="View"
+	/>
+    
+    <item 
+        android:id="@+id/menu_delete_file"
+        android:title="Delete"
+	/>
+    
+</menu>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout 
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="0.3">
+        
+	    <fragment 
+	        class="com.localhostr.android.Fragments.Sidebar"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:id="@+id/sidebar_fragment" />
+	    
+	    <fragment 
+	        class="com.localhostr.android.Fragments.AccountInfoFragment"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:id="@+id/account_info_fragment" />
+	    
+	    
+	</LinearLayout>
+    <LinearLayout 
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:id="@+id/container_for_fragment"
+        android:layout_weight="0.7">
+	</LinearLayout>
+</LinearLayout>

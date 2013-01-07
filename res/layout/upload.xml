@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+    
+    <Button 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pick_file"
+        android:text="Pick a file" />
+    
+    <ProgressBar 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:id="@+id/upload_progress"
+        android:visibility="gone"
+        android:indeterminate="false"
+        android:minWidth="150dp"
+        style="@android:style/Widget.ProgressBar.Horizontal" />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/uploaded_filename"
+        android:text="Uploading Screenshot-1-2-3-4.png"
+        android:visibility="gone" />
+    
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:id="@+id/cancel_upload"
+        android:visibility="gone"
+        android:text="Cancel" />
+    
+</LinearLayout>
