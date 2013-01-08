@@ -21,25 +21,25 @@ import com.localhostr.android.R;
  */
 public class UploaderFragment extends SherlockFragment {
 
-	private Button mPicker;
-	private Button mCanceller;
-	private TextView mFileName;
-	private ProgressBar mProgress;
-	private AsyncTask<Void, Integer, Void> mUploadTask;
-
+    private Button mPicker;
+    private Button mCanceller;
+    private TextView mFileName;
+    private ProgressBar mProgress;
+    private AsyncTask<Void, Integer, Void> mUploadTask;
+    
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
+						
 		final View ret = inflater.inflate(R.layout.upload, container, false);
-
+			
 		mPicker = (Button) ret.findViewById(R.id.pick_file);
 		mCanceller = (Button) ret.findViewById(R.id.cancel_upload);
 		mFileName = (TextView) ret.findViewById(R.id.uploaded_filename);
 		mProgress = (ProgressBar) ret.findViewById(R.id.upload_progress);
-
+		
 		mPicker.setOnClickListener(new OnClickListener() {
-
+				
 			@Override
 			public void onClick(View v) {
 				v.setVisibility(View.GONE);
@@ -51,18 +51,18 @@ public class UploaderFragment extends SherlockFragment {
 					@Override
 					protected Void doInBackground(Void... params) {
 						int i = 0;
-
+						
 						while (i <= 100) {
 							try {
 								Thread.sleep(50);
 							} catch (InterruptedException e) {
 							}
-
+						
 							i++;
-
+								
 							publishProgress(i);
 						}
-
+							
 						return null;
 					}
 
@@ -76,27 +76,27 @@ public class UploaderFragment extends SherlockFragment {
 						mProgress.setProgress(values[0]);
 					}				
 				};
-
+					
 				mUploadTask.execute();
 			}
 		});
-
+			
 		mCanceller.setOnClickListener(new OnClickListener() {
-
+			
 			@Override
 			public void onClick(View v) {
 				if (mUploadTask != null) {
 					mUploadTask.cancel(true);
 					mUploadTask = null;
 				}
-
+		
 				v.setVisibility(View.GONE);
 				mProgress.setVisibility(View.GONE);
 				mPicker.setVisibility(View.VISIBLE);
 				mFileName.setVisibility(View.GONE);
 			}
 		});
-
+		
 		return ret;
 	}
 }

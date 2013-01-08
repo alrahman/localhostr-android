@@ -28,24 +28,24 @@ public class Utils {
 	static {
 		//Initialize for our connections
 		SSLContext context = null;
-
+		
 		try {
 			context = SSLContext.getInstance("TLS");
 			context.init(null, new TrustManager[] {new AcceptAllSSL()}, new SecureRandom());
 		} catch (Exception e) {
-
+			
 			if (DEBUG) {
 				Log.e(TAG, "", e);
 			}
 		}		
-
+		
 		HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
 	}
 
 	private Utils() {
 		//Only static access to this class
 	}
-
+	
 	/**
 	 * Create a JSON string from an Exception.<br> <br>
 	 * A sample string will looking like this:
@@ -69,18 +69,18 @@ public class Utils {
 	public static String createJSONStringFromException(Exception e, boolean asArray) {
 		StringBuilder sb = new StringBuilder();
 		if (asArray) sb.append("[");
-
+		
 		sb.append("{ ")
-		.append("\"exception\": { ")
-		.append("\"type\": \"").append(e.getClass()).append("\",")
-		.append("\"message\": \"")
-		.append(e.getMessage().replaceAll("\"", "'"))
-		.append("\"")
-		.append("}")
-		.append("}");
-
+				.append("\"exception\": { ")
+					.append("\"type\": \"").append(e.getClass()).append("\",")
+					.append("\"message\": \"")
+						.append(e.getMessage().replaceAll("\"", "'"))
+						.append("\"")
+				.append("}")
+			.append("}");
+		
 		if (asArray) sb.append("]");
-
+		
 		return sb.toString();
 	}
 
@@ -95,21 +95,21 @@ public class Utils {
 	 */
 	public static String getSampleFilesList() throws IOException {
 		return "[ " + 
-		"{"+
-		"\"added\": \"2012-12-25T16:34:11Z\"," +
-		"\"name\": \"localhostr.png\"," +
-		"\"downloads\": 8," +
-		"\"direct\": {" +
-		"\"150x\": \"http://localhostr.com/file/150/c0rx8FLYwjwx/localhostr.png\"," +
-		"\"930x\": \"http://localhostr.com/file/930/c0rx8FLYwjwx/localhostr.png\"" +
-		"}," +
-		"\"href\": \"http://lh.rs/c0rx8FLYwjwx\"," +
-		"\"type\": \"image\"," +  
-		"\"id\": \"c0rx8FLYwjwx\"," + 
-		"\"size\": 112064" + 
-		"}]";
+	    "{"+
+	        "\"added\": \"2012-12-25T16:34:11Z\"," +
+	        "\"name\": \"localhostr.png\"," +
+	        "\"downloads\": 8," +
+	        "\"direct\": {" +
+	            "\"150x\": \"http://localhostr.com/file/150/c0rx8FLYwjwx/localhostr.png\"," +
+	            "\"930x\": \"http://localhostr.com/file/930/c0rx8FLYwjwx/localhostr.png\"" +
+	        "}," +
+	        "\"href\": \"http://lh.rs/c0rx8FLYwjwx\"," +
+	        "\"type\": \"image\"," +  
+	        "\"id\": \"c0rx8FLYwjwx\"," + 
+	        "\"size\": 112064" + 
+	    "}]";
 	}
-
+	
 	/**
 	 * Convenience method to retrieve the current database instance. This is 
 	 * preferred to creating a new {@link DB} instance so this resource
@@ -120,7 +120,7 @@ public class Utils {
 	public static DB getDB(Context ctx) {
 		return ((LocalhostrApp) ctx.getApplicationContext()).getDB();
 	}
-
+	
 	/**
 	 * Make a request to the Localhostr API service. This should <b>not</b>
 	 * be called on the application's main thread as it involves a blocking
@@ -137,51 +137,51 @@ public class Utils {
 	 * @see #createJSONStringFromException(Exception, boolean)
 	 */
 	public static String makeApiRequest(String address, String authString) 
-	throws IOException {
-
+		throws IOException {
+	
 		HttpsURLConnection connection = null;
 		URL url;
 		String result = null;
-
+		
 		try {
 			url = new URL(address);
-
+		
 			connection = (HttpsURLConnection) url.openConnection();
 			connection.addRequestProperty("Authorization", "Basic " + authString);
 			connection.addRequestProperty("Accept", Constants.ACCEPT_HEADER);
 			connection.connect();
 			int response = connection.getResponseCode();
 			BufferedInputStream is = null;
-
+			
 			if (response == HttpsURLConnection.HTTP_OK) {
 				is = new BufferedInputStream(connection.getInputStream());
 			}
-
+			
 			else {
 				is = new BufferedInputStream(connection.getErrorStream());
 			}
-
+	
 			int c = -1;
 			StringBuilder sb = new StringBuilder();
-
+			
 			while ((c = is.read()) != -1) {
 				sb.append((char) c);
 			}
-
+			
 			result = sb.toString();
-
+			
 		} catch (IOException e) {
 			throw e;
-
+			
 		} finally {
 			if (connection != null) {
 				connection.disconnect();
 			}
 		}
-
+		
 		return result;
 	}
-
+	
 	/**
 	 * A {@link TrustManager} which accepts all certificates.
 	 * @author Al
@@ -191,12 +191,12 @@ public class Utils {
 
 		@Override
 		public void checkClientTrusted(X509Certificate[] chain, String authType)
-		throws CertificateException {
+				throws CertificateException {
 		}
 
 		@Override
 		public void checkServerTrusted(X509Certificate[] chain, String authType)
-		throws CertificateException {
+				throws CertificateException {
 		}
 
 		@Override
